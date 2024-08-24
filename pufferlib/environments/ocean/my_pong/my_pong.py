@@ -35,7 +35,7 @@ class MyPong(pufferlib.PufferEnv):
         self.ball_initial_speed_y = 1
         self.ball_speed_y_increment = 3
         self.ball_max_speed_y = 13
-        self.max_score = 1  # 21
+        self.max_score = 21  # 21
 
         # sim data (coordinates are bottom-left increasing towards top-right)
         self.paddle_yl_yr = np.zeros((self.num_envs, 2,), dtype=np.float32)
@@ -167,20 +167,19 @@ class RaylibClient:
         self.ball_height = ball_height
         self.x_pad = 3 * self.paddle_width
 
-        self.background_color = (0, 0, 0, 255)
         self.paddle_left_color = (0, 255, 0, 255)
         self.paddle_right_color = (255, 0, 0, 255)
         self.ball_color = (255, 255, 255, 255)
 
         rl.InitWindow(width + 2 * self.x_pad, height, "PufferLib MyPong".encode())
-        rl.SetTargetFPS(15)  # 60 / frame_skip
+        rl.SetTargetFPS(120)  # 60 / frame_skip
 
     def render(self, paddles_pos, ball_pos, scores):
         if rl.IsKeyDown(rl.KEY_ESCAPE):
             exit(0)
 
         rl.BeginDrawing()
-        rl.ClearBackground(self.background_color)
+        rl.ClearBackground(render.PUFF_BACKGROUND)
 
         paddle_left = (self.x_pad - self.paddle_width,
                        self.height - paddles_pos[0] - self.paddle_height,
@@ -195,12 +194,12 @@ class RaylibClient:
         rl.DrawRectangle(*map(int, paddle_left), self.paddle_left_color)
         rl.DrawRectangle(*map(int, paddle_right), self.paddle_right_color)
         rl.DrawRectangle(*map(int, ball), self.ball_color)
-        for i in range(11):
-            rl.DrawRectangle(int(self.width / 2) + self.x_pad - 3, 2 * i * self.height // 21, 6, self.height // 21, (255, 255, 255, 255))
+        # for i in range(11):
+        #     rl.DrawRectangle(int(self.width / 2) + self.x_pad - 1, 2 * i * self.height // 21, 2, self.height // 21, (255, 255, 255, 255))
         rl.DrawFPS(10, 10)
         str_scores = [str(scores[0]).encode('UTF-8'), str(scores[1]).encode('UTF-8')]
-        rl.DrawText(str_scores[0], int(self.width / 2 + self.x_pad - 50 - rl.MeasureText(str_scores[0], 30) / 2), 10, 30, (255, 255, 255, 255))
-        rl.DrawText(str_scores[1], int(self.width / 2 + self.x_pad + 50 - rl.MeasureText(str_scores[1], 30) / 2), 10, 30, (255, 255, 255, 255))
+        rl.DrawText(str_scores[0], int(self.width / 2 + self.x_pad - 50 - rl.MeasureText(str_scores[0], 30) / 2), 10, 30, render.PUFF_TEXT)
+        rl.DrawText(str_scores[1], int(self.width / 2 + self.x_pad + 50 - rl.MeasureText(str_scores[1], 30) / 2), 10, 30, render.PUFF_TEXT)
         rl.EndDrawing()
 
         return render.cdata_to_numpy()
