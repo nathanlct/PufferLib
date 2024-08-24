@@ -595,7 +595,7 @@ def rollout(env_creator, env_kwargs, policy_cls, rnn_cls, agent_creator, agent_k
 
     frames = []
     tick = 0
-    while tick <= 1000:
+    while tick <= 10000:
         if tick % 1 == 0:
             render = driver.render()
             if driver.render_mode == 'ansi':
@@ -627,8 +627,8 @@ def rollout(env_creator, env_kwargs, policy_cls, rnn_cls, agent_creator, agent_k
         tick += 1
 
     # Save frames as gif
-    import imageio
-    imageio.mimsave('../docker/eval.gif', frames, fps=15, loop=0)
+    # import imageio
+    # imageio.mimsave('../docker/eval.gif', frames, fps=15, loop=0)
 
 def seed_everything(seed, torch_deterministic):
     random.seed(seed)
