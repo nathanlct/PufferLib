@@ -72,7 +72,7 @@ cdef class CMyPong:
         self.ball_speed_y_increment = ball_speed_y_increment
         self.max_score = max_score
         self.misc_logging = misc_logging
-        self.frameskip = 4
+        self.frameskip = 4  # (TODO: set to 1 at eval)
 
         # logging
         self.tick = 0
