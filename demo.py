@@ -126,6 +126,7 @@ def sweep_carbs(args, env_name, make_env, policy_cls, rnn_cls):
 
     import wandb
     sweep_id = wandb.sweep(
+        entity=args['wandb_entity'],
         sweep=args['sweep'],
         project="carbs",
     )
