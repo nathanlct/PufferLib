@@ -171,6 +171,11 @@ MAKE_FNS = {
     'puffer': make_puffer,
     'snake': make_snake,
     'my_pong': make_my_pong,
+<<<<<<< Updated upstream
+=======
+    'tactical': make_tactical,
+    'highway': make_highway,
+>>>>>>> Stashed changes
     'continuous': make_continuous,
     'squared': make_squared,
     'bandit': make_bandit,
