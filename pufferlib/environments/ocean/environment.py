@@ -8,6 +8,22 @@ def make_moba(num_envs=200, reward_death=-1.0, reward_xp=0.006,
         reward_xp=reward_xp, reward_distance=reward_distance,
         reward_tower=reward_tower, render_mode=render_mode)
 
+def make_pong(num_envs=1):
+    from .pong import pong
+    return pong.MyPong(num_envs=num_envs)
+
+def make_breakout(num_envs=1):
+    from .breakout import breakout
+    return breakout.MyBreakout(num_envs=num_envs)
+
+def make_connect4(num_envs=1):
+    from .connect4 import connect4
+    return connect4.MyConnect4(num_envs=num_envs)
+
+def make_tripletriad(num_envs=1):
+    from .tripletriad import tripletriad
+    return tripletriad.MyTripleTriad(num_envs=num_envs)
+
 def make_foraging(width=1080, height=720, num_agents=4096, horizon=512,
         discretize=True, food_reward=0.1, render_mode='rgb_array'):
     from .grid import grid
@@ -48,6 +64,10 @@ def make_puffer(width=1080, height=720, num_agents=4096, horizon=512,
         init_fn=init_fn, reward_fn=reward_fn,
         render_mode=render_mode)
 
+def make_puffergrid(render_mode='rgb_array', vision_range=3):
+    from .grid import grid
+    return grid.PufferGrid(render_mode, vision_range)
+
 def make_snake(widths=None, heights=None, num_snakes=None, num_food=None, vision=5,
         leave_corpse_on_death=None, preset='1440p-4096', render_mode=None):
     # TODO: Fix render_mode
@@ -59,7 +79,7 @@ def make_snake(widths=None, heights=None, num_snakes=None, num_food=None, vision
         num_snakes = num_snakes or [4096]
         num_food = num_food or [65536]
         leave_corpse_on_death = leave_corpse_on_death or True
-        render_mode = render_mode or 'human'
+        render_mode = render_mode or 'rgb_array'
     elif preset == '720p-1024':
         widths = widths or 4*[1280]
         heights = heights or 4*[720]
@@ -165,10 +185,13 @@ def make_multiagent(**kwargs):
 
 MAKE_FNS = {
     'moba': make_moba,
+    'my_pong': make_pong,
+    'my_breakout': make_breakout,
     'foraging': make_foraging,
     'predator_prey': make_predator_prey,
     'group': make_group,
     'puffer': make_puffer,
+    'puffergrid': make_puffergrid,
     'snake': make_snake,
     'my_pong': make_my_pong,
     'continuous': make_continuous,
@@ -181,6 +204,9 @@ MAKE_FNS = {
     'spaces': make_spaces,
     'performance': make_performance,
     'performance_empiric': make_performance_empiric,
+    'my_breakout': make_breakout,
+    'my_connect4': make_connect4,
+    'my_tripletriad': make_tripletriad,
 }
 
 def env_creator(name='squared'):

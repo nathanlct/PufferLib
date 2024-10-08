@@ -1,6 +1,7 @@
-from setuptools import find_packages, setup
+from setuptools import find_packages, setup, Extension
 from Cython.Build import cythonize
 import numpy
+#  python3 setup.py built_ext --inplace
 
 VERSION = '1.0.0'
 
@@ -126,6 +127,11 @@ environments = {
         f'gymnasium=={GYMNASIUM_VERSION}',
         'minihack==0.1.5',
     ],
+    'mujoco': [
+        f'gymnasium[mujoco]=={GYMNASIUM_VERSION}',
+        'mujoco==2.3.7',  # mujuco > 3 is supported by gymnasium > 1.0
+        'moviepy',
+    ],
     'nethack': [
         f'gym=={GYM_VERSION}',
         f'gymnasium=={GYMNASIUM_VERSION}',
@@ -206,6 +212,26 @@ common = cleanrl + [environments[env] for env in [
     'vizdoom',
 ]]
 
+extension_paths = [
+    'pufferlib/environments/ocean/moba/cy_moba',
+    'pufferlib/environments/ocean/snake/cy_snake',
+    'pufferlib/environments/ocean/pong/cy_pong',
+    'pufferlib/environments/ocean/breakout/cy_breakout',
+    'pufferlib/environments/ocean/connect4/cy_connect4',
+    'pufferlib/environments/ocean/grid/cy_grid',
+    'pufferlib/environments/ocean/tripletriad/cy_tripletriad',
+]
+
+extensions = [Extension(
+    path.replace('/', '.'),
+    [path + '.pyx'],
+    include_dirs=[numpy.get_include(), 'raylib-5.0_linux_amd64/include'],
+    library_dirs=['raylib-5.0_linux_amd64/lib'],
+    libraries=["raylib"],
+    runtime_library_dirs=["raylib-5.0_linux_amd64/lib"],
+    extra_compile_args=['-DPLATFORM_DESKTOP'],
+) for path in extension_paths]
+ 
 setup(
     name="pufferlib",
     description="PufferAI Library"
@@ -242,14 +268,15 @@ setup(
         "pufferlib/environments/ocean/snake/c_snake.pyx",
         "pufferlib/environments/ocean/my_pong/c_my_pong.pyx",
         "pufferlib/environments/ocean/moba/c_moba.pyx",
+        "pufferlib/environments/ocean/moba/puffernet.pyx",
         "pufferlib/environments/ocean/moba/c_precompute_pathing.pyx",
+        *extensions,
     ], 
        #nthreads=6,
        #annotate=True,
        #compiler_directives={'profile': True},# annotate=True
     ),
-    extra_compile_args=['-O3', '-march=native'],
-    include_dirs=[numpy.get_include()],
+    include_dirs=[numpy.get_include(), 'raylib-5.0_linux_amd64/include'],
     python_requires=">=3.8",
     license="MIT",
     author="Joseph Suarez",
